@@ -4,7 +4,7 @@
 
 TOPDIR=/storage/brno12-cerit/home/xvlasa15
 REPODIR=$TOPDIR/knn-whisper
-DATASETDIR=$TOPDIR/common-voice-13
+DATASETDIR=$TOPDIR/common_voice_predictions_text
 FFMPEGDIR=$TOPDIR/ffmpeg-6.0-amd64-static
 
 

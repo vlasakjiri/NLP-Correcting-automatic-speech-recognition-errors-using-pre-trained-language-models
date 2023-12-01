@@ -23,17 +23,18 @@ def train(out_dir,
           peft_path):
 
     # setup data pipeline
-    pipeline_name = "openai/whisper-large-v2"
+    pipeline_name = "openai/whisper-small"
     processor = WhisperProcessor.from_pretrained(
         pipeline_name, language="czech", 
         task="transcribe"
     )
 
     # setup dataset
-    dset = load_from_disk(dataset_dir)
+    # dset = load_from_disk(dataset_dir)
+    dset = load_dataset("jkot/merged_preprocessed_parliament_commonvoice", cache_dir=cache_dir)
+    print(dset)
 
-    dataset_test_split = dset["test"]
-    print("Test dataset:", dataset_test_split)
+
     
     data_collator = DataCollatorSpeechSeq2SeqWithPadding(processor=processor)
 
@@ -94,7 +95,6 @@ def train(out_dir,
     trainer = Seq2SeqTrainer(
         args=training_args,
         model=student_model,
-        eval_dataset=dataset_test_split,
         data_collator=data_collator,
         compute_metrics=wer,
         tokenizer=processor.feature_extractor,
@@ -103,33 +103,37 @@ def train(out_dir,
 
     results = trainer.predict(dset["train"])
     print(results.metrics)
-    with open('common_voice_predictions_train.npy', 'wb') as f:
+    with open('merged_dset_predictions_train.npy', 'wb') as f:
         np.save(f, results.predictions)
+    try:
+        with open('/storage/brno12-cerit/home/xvlasa15/merged_dset_predictions_train.npy', 'wb') as f:
+            np.save(f, results.predictions)
+    except:
+        pass
+
+    results = trainer.predict(dset["test"])
+    print(results.metrics)
+    with open('merged_dset_predictions_test.npy', 'wb') as f:
+        np.save(f, results.predictions)
+    try:
+        with open('/storage/brno12-cerit/home/xvlasa15/merged_dset_predictions_test.npy', 'wb') as f:
+            np.save(f, results.predictions)
+    except:
+        pass
 
 if __name__ == "__main__":
-    parser = OptionParser()
-    parser.add_option("-o", "--out-dir", dest="out_dir",
-                        help="Path to the output directory.")
-    parser.add_option("-b", "--batch-size", dest="batch_size",
-                      help="Batch size.", default=16)  
-    parser.add_option("-c", "--cache-dir", dest="cache_dir",
-                      default="~/.cache/huggingface/datasets")
-    parser.add_option("-s", "--student-model-name", 
-                        dest="student_model_name",
-                        default="openai/whisper-small")
-    parser.add_option("-d", "--dataset-path", dest="dataset_dir",
-                    help="Path to preprocessed dataset with eval split")
-    parser.add_option("-p", "--peft-model-path", dest="peft_path", help="Path to the peft model", default=None)
-  
-    (options, args) = parser.parse_args()
 
-    print("Training with options: ", options)
-
+    out_dir = "/storage/brno12-cerit/home/xvlasa15/"
+    batch_size = 32
+    cache_dir = "cache"
+    student_model_name = "openai/whisper-small"
+    dataset_dir = "dataset"
+    peft_path = None
     train( 
-        options.out_dir, 
-        int(options.batch_size),
-        options.cache_dir,
-        options.student_model_name,
-        options.dataset_dir,
-        options.peft_path
+        out_dir=out_dir, 
+        batch_size=batch_size, 
+        cache_dir=cache_dir,
+        student_model_name=student_model_name,
+        dataset_dir=dataset_dir,
+        peft_path=peft_path
     )
