@@ -4,15 +4,12 @@
 
 TOPDIR=/storage/brno12-cerit/home/xvlasa15
 REPODIR=$TOPDIR/knn-whisper
-DATASETDIR=$TOPDIR/common_voice_predictions_text
-FFMPEGDIR=$TOPDIR/ffmpeg-6.0-amd64-static
+DATASETDIR=$TOPDIR/cache
 
 
-cp -r $REPODIR $FFMPEGDIR $DATASETDIR "$SCRATCHDIR"
+rsync -rh --info=progress2 $REPODIR $DATASETDIR "$SCRATCHDIR"
 
 
-# chmod +x ffmpeg-6.0-amd64-static/ffmpeg
-export PATH=$PATH:$TOPDIR/ffmpeg-6.0-amd64-static/
 
 cd $SCRATCHDIR/knn-whisper
 pip install -r requirements.txt

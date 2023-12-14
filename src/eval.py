@@ -20,10 +20,6 @@ def eval(out_dir,
 
     # setup data pipeline
     pipeline_name = "openai/whisper-large-v2"
-    processor = WhisperProcessor.from_pretrained(
-        pipeline_name, language="czech", 
-        task="transcribe"
-    )
 
     # setup dataset
     dset = load_from_disk(dataset_dir)
@@ -90,14 +86,14 @@ def eval(out_dir,
         eval_dataset=dataset_test_split,
         data_collator=data_collator,
         compute_metrics=wer,
-        tokenizer=processor.feature_extractor,
+        # tokenizer=processor.feature_extractor,
     )
 
 
-    results = trainer.predict(dset["train"])
+    results = trainer.eval(dset["train"])
     print(results.metrics)
-    with open('common_voice_predictions_train.npy', 'wb') as f:
-        np.save(f, results.predictions)
+    # with open('common_voice_predictions_train.npy', 'wb') as f:
+    #     np.save(f, results.predictions)
 
 if __name__ == "__main__":
     parser = OptionParser()

@@ -85,6 +85,8 @@ def train(out_dir,
         eval_steps=1000,
         save_strategy = "steps",
         evaluation_strategy="steps",
+
+        dataloader_num_workers=4,
     )
 
     print(training_args)
@@ -96,37 +98,32 @@ def train(out_dir,
         args=training_args,
         model=student_model,
         data_collator=data_collator,
-        compute_metrics=wer,
         tokenizer=processor.feature_extractor,
     )
-
-
-    results = trainer.predict(dset["train"])
-    print(results.metrics)
-    with open('merged_dset_predictions_train.npy', 'wb') as f:
-        np.save(f, results.predictions)
-    try:
-        with open('/storage/brno12-cerit/home/xvlasa15/merged_dset_predictions_train.npy', 'wb') as f:
-            np.save(f, results.predictions)
-    except:
-        pass
-
     results = trainer.predict(dset["test"])
     print(results.metrics)
-    with open('merged_dset_predictions_test.npy', 'wb') as f:
+    with open('merged_dset_predictions_test_trained.npy', 'wb') as f:
         np.save(f, results.predictions)
-    try:
-        with open('/storage/brno12-cerit/home/xvlasa15/merged_dset_predictions_test.npy', 'wb') as f:
-            np.save(f, results.predictions)
-    except:
-        pass
+
+
+    # results = trainer.predict(dset["train"])
+    # print(results.metrics)
+    # with open('merged_dset_predictions_train.npy', 'wb') as f:
+    #     np.save(f, results.predictions)
+    # try:
+    #     with open('/storage/brno12-cerit/home/xvlasa15/merged_dset_predictions_train.npy', 'wb') as f:
+    #         np.save(f, results.predictions)
+    # except:
+    #     pass
+
+
 
 if __name__ == "__main__":
 
     out_dir = "/storage/brno12-cerit/home/xvlasa15/"
     batch_size = 32
-    cache_dir = "cache"
-    student_model_name = "openai/whisper-small"
+    cache_dir = "../cache"
+    student_model_name = "vtlustos/whisper-small"
     dataset_dir = "dataset"
     peft_path = None
     train( 
