@@ -1,9 +1,7 @@
 datasets>=2.6.1
 transformers[sentencepiece]
-librosa
 evaluate>=0.3.0
 jiwer
 gradio
-soundfile>=0.12.1
 tensorboard
 peft
