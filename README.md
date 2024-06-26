@@ -1,6 +1,6 @@
-# KNN WHISPER
+# Training a language model for correcting ASR transcription errors 
 
-This projects implements training, evaluation and dataset processing ZPJa project. 
+This projects trains mBART and mT5 models to correct errors made in automatic speech recognition by an OpenAI Whisper model.
 
 ## Requirements
 Project uses huggingface and pytorch. You can install all of the requirements using
