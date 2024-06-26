@@ -1,6 +1,20 @@
-# Training a language model for correcting ASR transcription errors 
+# Correcting automatic speech recognition errors using pre-trained language models
 
 This projects trains mBART and mT5 models to correct errors made in automatic speech recognition by an OpenAI Whisper model.
+
+## Results
+|Model | WER|
+| -----|----|
+|vtlustos/whisper-small (finetuned ASR)| 23.6|
+|mT5-small | 26.5|
+|mT5-large | 22.4|
+|mBART-large-50 | 21.4|
+
+|Model | WER|
+| -----|----|
+|openai/whisper-small (baseline ASR)| 50.1|
+|mT5-small | 49.2|
+|mBART-large-50 | 25.1|
 
 ## Requirements
 Project uses huggingface and pytorch. You can install all of the requirements using
