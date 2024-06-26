@@ -1,6 +1,6 @@
 # Correcting automatic speech recognition errors using pre-trained language models
 
-This projects trains mBART and mT5 models to correct errors made in automatic speech recognition by an OpenAI Whisper model.
+This projects trains mBART and mT5 models to correct errors made in automatic speech recognition by an OpenAI Whisper model. It was done as an assignment in the Natural Language Processing course at Brno Univerisity of Technology
 
 ## Results
 |Model | WER|
